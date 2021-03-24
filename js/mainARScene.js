@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import {StyleSheet} from 'react-native';
+import {StyleSheet, TextInput, View} from 'react-native';
 
 import {
   ViroARScene,
@@ -10,10 +10,10 @@ import {
   ViroConstants,
   Viro3DObject,
   ViroAmbientLight,
+  ViroFlexView,
 } from 'react-viro';
 
 export default class HelloWorldSceneAR extends Component {
-
   constructor() {
     super();
 
@@ -22,11 +22,10 @@ export default class HelloWorldSceneAR extends Component {
       text : "Initializing AR..."
     };
 
-    // bind 'this' to functions
-    this._onInitialized = this._onInitialized.bind(this);
   }
 
   render() {
+
     return (
       <ViroARScene onTrackingUpdated={this._onInitialized} >
         <ViroAmbientLight color={"#aaaaaa"} />
@@ -46,15 +45,6 @@ export default class HelloWorldSceneAR extends Component {
     );
   }
 
-  _onInitialized(state, reason) {
-    if (state == ViroConstants.TRACKING_NORMAL) {
-      this.setState({
-        text : "Hello World!"
-      });
-    } else if (state == ViroConstants.TRACKING_NONE) {
-      // Handle loss of tracking
-    }
-  }
 }
 
 var styles = StyleSheet.create({
