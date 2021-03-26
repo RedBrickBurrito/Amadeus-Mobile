@@ -6,11 +6,9 @@ import {StyleSheet, TextInput, View} from 'react-native';
 
 import {
   ViroARScene,
-  ViroText,
-  ViroConstants,
   Viro3DObject,
   ViroAmbientLight,
-  ViroFlexView,
+  ViroARPlaneSelector,
 } from 'react-viro';
 
 export default class HelloWorldSceneAR extends Component {
@@ -34,7 +32,7 @@ export default class HelloWorldSceneAR extends Component {
             resources={[require('./res/scene.bin'),
                         require('./res/textures/Material_-_Base_baseColor.png'),
                         require('./res/textures/Material_-_Rostro_baseColor.png')]}
-            position={[0, 0, 0]}
+            position={[0.1, 0, -0.3]}
             scale={[.2, .2, .2]}
             animation={{name:'Pose 1',
           run:true,
