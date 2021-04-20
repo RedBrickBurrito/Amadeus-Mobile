@@ -41,13 +41,12 @@ var AR_NAVIGATOR_TYPE = "AR";
 // be presented with a choice of AR or VR. By default, we offer the user a choice.
 var defaultNavigatorType = UNSET;
 
-const SendMessageIcon = (props) => (
-  <Icon {...props} name='paper-plane-outline' />
-);
 
 sendMessage = (message) => {
   console.log(message);
 }
+
+
 
 const TextInputHandler = () => {
   const [value, setValue] = React.useState('');
@@ -62,7 +61,7 @@ const TextInputHandler = () => {
     status='danger'
     style={localStyles.textInput}
   />
-  <Button size="small" style={localStyles.sendButton} status='danger' onPress={() => sendMessage(value)} >Send</Button>
+  <Button size="small" style={localStyles.sendButton} status='danger' onPress={() => sendMessage(value)} onPressOut={() => setValue('')} >Send</Button>
   
   </>
   );
@@ -99,7 +98,6 @@ export default class ViroSample extends Component {
   _getExperienceSelector() {
     return (
       <>
-      <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={eva.dark}>
       <View style={localStyles.outer}>
         <View style={localStyles.inner}>
