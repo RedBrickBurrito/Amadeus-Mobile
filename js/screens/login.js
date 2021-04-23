@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, StyleSheet, TextInput, Text } from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  StyleSheet,
+  TextInput,
+  Text,
+  Alert,
+} from 'react-native';
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider, Button } from '@ui-kitten/components';
+import { logIn } from '../services/user';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -11,11 +19,24 @@ function Login() {
     password: true,
   });
 
-  const handleSubmit = () => {
+  const createTwoButtonAlert = (data) =>
+    Alert.alert(data.title, data.message, [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      { text: 'OK', onPress: () => console.log('OK Pressed') },
+    ]);
+
+  const validate = () => {
+    let validated = true;
+
     if (email.length < 1) {
       setInputStatus((prevState) => {
         return { ...prevState, email: false };
       });
+      validated = false;
       console.log(inputStatus);
     } else {
       setInputStatus((prevState) => {
@@ -28,10 +49,35 @@ function Login() {
         return { ...prevState, password: false };
       });
       console.log(inputStatus);
+      validated = false;
     } else {
       setInputStatus((prevState) => {
         return { ...prevState, email: true };
       });
+    }
+
+    return validated;
+  };
+
+  const handleSubmit = () => {
+    const validated = validate();
+
+    if (validated) {
+      const data = { email: email, password: password };
+
+      logIn(data)
+        .then((responseData) => {
+          createTwoButtonAlert({
+            title: 'Success',
+            message: responseData.message,
+          });
+        })
+        .catch((responseData) => {
+          createTwoButtonAlert({
+            title: 'Error',
+            message: responseData.message,
+          });
+        });
     }
   };
 
