@@ -4,28 +4,95 @@ import * as eva from '@eva-design/eva';
 import { ApplicationProvider, Button } from '@ui-kitten/components';
 
 function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [inputStatus, setInputStatus] = useState({
+    email: true,
+    password: true,
+  });
+
+  const handleSubmit = () => {
+    if (email.length < 1) {
+      setInputStatus((prevState) => {
+        return { ...prevState, email: false };
+      });
+      console.log(inputStatus);
+    } else {
+      setInputStatus((prevState) => {
+        return { ...prevState, email: true };
+      });
+    }
+
+    if (password.length < 1) {
+      setInputStatus((prevState) => {
+        return { ...prevState, password: false };
+      });
+      console.log(inputStatus);
+    } else {
+      setInputStatus((prevState) => {
+        return { ...prevState, email: true };
+      });
+    }
+  };
+
+  const handleChangeText = (value, type) => {
+    if (type == 'pwd') {
+      setPassword(value);
+    }
+
+    if (type == 'email') {
+      setEmail(value);
+    }
+  };
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <Button appearance="ghost" style={styles.backButton}>
-          <Text style={styles.backText}>Back</Text>
-        </Button>
+        <Text
+          style={styles.backText}
+          onPress={() => console.log('pressed the back button')}
+        >
+          ᐸ
+        </Text>
         <Text style={styles.title}>Log In</Text>
         <View style={styles.inputContainer}>
-          <View style={styles.input}>
-            <TextInput placeholder="E-mail" placeholderTextColor="#F5F3F4" />
+          <View style={inputStatus.email ? styles.input : styles.inputDanger}>
+            <TextInput
+              style={styles.textInput}
+              placeholder="E-mail"
+              placeholderTextColor="#F5F3F4"
+              value={email}
+              onChangeText={(value) => handleChangeText(value, 'email')}
+            />
           </View>
-          <View style={styles.input}>
-            <TextInput placeholder="Password" placeholderTextColor="#F5F3F4" />
+          <View style={inputStatus.email ? styles.input : styles.inputDanger}>
+            <TextInput
+              style={styles.textInput}
+              secureTextEntry
+              placeholder="Password"
+              placeholderTextColor="#F5F3F4"
+              value={password}
+              onChangeText={(value) => handleChangeText(value, 'pwd')}
+            />
           </View>
         </View>
-        <Button appearance="outline" style={styles.button}>
+        <Button
+          appearance="outline"
+          style={styles.button}
+          onPress={() => handleSubmit()}
+          activeOpacity={0.2}
+        >
           <Text style={styles.buttonText}>Submit</Text>
         </Button>
         <View style={styles.footer}>
           <Text>
             <Text style={styles.footerText}>Don't have an account? </Text>
-            <Text style={styles.footerButtonText}>Sign Up</Text>
+            <Text
+              style={styles.footerButtonText}
+              onPress={() => console.log('pressed the sign up button')}
+            >
+              Sign Up
+            </Text>
           </Text>
         </View>
       </View>
@@ -44,7 +111,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   title: {
-    fontFamily: 'Monserrat-Regular',
+    fontFamily: 'Monserrat-Bold',
     fontWeight: 'bold',
     fontSize: 64,
     color: '#E5383B',
@@ -58,6 +125,15 @@ const styles = StyleSheet.create({
     borderBottomColor: '#F5F3F4',
     borderBottomWidth: 1,
     marginBottom: '10%',
+  },
+  inputDanger: {
+    width: '95%',
+    borderBottomColor: 'red',
+    borderBottomWidth: 1,
+    marginBottom: '10%',
+  },
+  textInput: {
+    color: 'white',
   },
   button: {
     borderRadius: 100,
@@ -98,6 +174,8 @@ const styles = StyleSheet.create({
   },
   backText: {
     color: '#F5F3F4',
+    fontSize: 32,
+    fontWeight: 'bold',
   },
 });
 
