@@ -17,7 +17,7 @@ import {
 } from "react-native";
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider, Button, Input} from "@ui-kitten/components";
-import { set } from "mongoose";
+import {signUp} from '../services/user';
 
 const useInputState = (initialValue = '#E5383B') =>{
     const [value, setValue] = React.useState(initialValue);
@@ -26,6 +26,69 @@ const useInputState = (initialValue = '#E5383B') =>{
 
 function Signup(){
     const basicInputState = useInputState();
+    const [name, setname] = useState('');
+    const [email, setemail] = useState('');
+    const [psswd, setpsswd] = useState('');
+
+    const createTwoButtonAlert = (data) =>
+    Alert.alert(data.title, data.message, [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      { text: 'OK', onPress: () => console.log('OK Pressed') },
+    ]);
+
+    const handleSubmit = () => {
+        const validated = validate();
+    
+        if (validated) {
+          const data = { email: email, password: psswd };
+    
+          signUp(data)
+            .then((responseData) => {
+              createTwoButtonAlert({
+                title: 'Success',
+                message: responseData.message,
+              });
+            })
+            .catch((responseData) => {
+              createTwoButtonAlert({
+                title: 'Error',
+                message: responseData.message,
+              });
+            });
+        }
+      };
+
+    const handleChangeText = (value, type) => {
+        if (type == 'psswd') {
+          setpsswd(value);
+        }
+    
+        if (type == 'email') {
+          setemail(value);
+        }
+
+        if (type == 'name') {
+            setname(value);
+          }
+      };
+
+      const validate = () => {
+        let validated = true;
+    
+        if (email.length < 1) {
+          validated = false;
+        }
+    
+        if (psswd.length < 1) {
+          validated = false;
+        }
+        return validated;
+      };
+
     return(
         <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -41,17 +104,17 @@ function Signup(){
                             <Text style={styles.title}>Sign Up</Text>
                             <Text style={styles.name}>Name</Text>
                             <View>
-                                <TextInput style={styles.input}/>
+                                <TextInput style={styles.input} value={name} onChangeText={(value) => handleChangeText(value, 'name')}/>
                             </View>
                             <Text style={styles.email}>E-mail</Text>
                             <View>
-                                <TextInput style={styles.input}/>
+                                <TextInput style={styles.input} value={email} onChangeText={(value) => handleChangeText(value, 'email')}/>
                             </View>
                             <Text style={styles.password}>Password</Text>
                             <View>
-                                <TextInput style={styles.input}/>
+                                <TextInput style={styles.input} value={psswd} onChangeText={(value) => handleChangeText(value, 'psswd')}/>
                             </View>
-                            <Button style={styles.button} status='primary' appearance='outline' activeOpacity={0.2}>
+                            <Button style={styles.button} status='primary' appearance='outline' activeOpacity={0.2} onPress={() => handleSubmit()}>
                                 {evaProps => <Text{...evaProps} style={styles.submit}>Submit</Text>}
                             </Button>
                             <Text style={styles.footer}>
