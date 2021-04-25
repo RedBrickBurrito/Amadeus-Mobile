@@ -9,19 +9,18 @@
 
 import React, { Component, useState} from "react";
 import {
-  AppRegistry,
   View,
   StyleSheet,
-  PixelRatio,
   TouchableHighlight,
   SafeAreaView,
+  Alert
 } from "react-native";
 
 import {ViroARSceneNavigator } from "react-viro";
 import ToggleSwitch  from "toggle-switch-react-native";
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider, Text, Button, Icon, IconRegistry, Input} from '@ui-kitten/components';
-import {EvaIconsPack} from '@ui-kitten/eva-icons'
+import {sendMessage} from './js/sendMessageService';
 /*
  TODO: Insert your API key below
  */
@@ -42,9 +41,39 @@ var AR_NAVIGATOR_TYPE = "AR";
 var defaultNavigatorType = UNSET;
 
 
-sendMessage = (message) => {
-  console.log(message);
-}
+handleSendMessage = (message) => {
+  {
+  Alert.alert(
+    'testing',
+    message,
+    [
+      {text: 'Ok'}
+    ],
+    {cancelable: true}
+  )
+  sendMessage(message)
+    .then((responseData) => {
+     Alert.alert(
+       'Success',
+       responseData.message,
+       [
+         {text: 'Ok'}
+       ],
+       {cancelable: true}
+     )
+    })
+    .catch((responseData) => {
+      Alert.alert(
+        'Failure',
+        responseData.message,
+        [
+          {text: 'Ok'}
+        ],
+        {cancelable: true}
+      )
+    })
+  } 
+  }
 
 
 
@@ -61,7 +90,7 @@ const TextInputHandler = () => {
     status='danger'
     style={localStyles.textInput}
   />
-  <Button size="small" style={localStyles.sendButton} status='danger' onPress={() => sendMessage(value)} onPressOut={() => setValue('')} >Send</Button>
+  <Button size="small" style={localStyles.sendButton} status='danger' onPress={() => handleSendMessage(value)} onPressOut={() => setValue('')} >Send</Button>
   
   </>
   );
