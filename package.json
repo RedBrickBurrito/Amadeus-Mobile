@@ -6,6 +6,11 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
   },
+  "rnpm": {
+    "assets": [
+      "./js/res/fonts"
+    ]
+  },
   "dependencies": {
     "@eva-design/eva": "^2.0.0",
     "@ui-kitten/components": "^5.0.0",
