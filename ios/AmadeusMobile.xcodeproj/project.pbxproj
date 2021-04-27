@@ -40,10 +40,12 @@
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
+
 		E942470B55C64A1EBFE15756 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 797605D76B954112942ACBFE /* libRNSVG.a */; };
 		D313055F254F4197B80DCA33 /* libRNSVG-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 318913843AB241E097A2A802 /* libRNSVG-tvOS.a */; };
 		E2B7CCAF29AE4F1CBD2AABCB /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8908ECCCE2CA4CE68BB31831 /* Montserrat-Bold.ttf */; };
 		90BA36F1731F42038BC29E34 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8A2C13CA9705426CB8BF4775 /* Montserrat-Regular.ttf */; };
+    
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -351,11 +353,13 @@
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+
 		CDC593276A40413DA385525C /* RNSVG.xcodeproj */ = {isa = PBXFileReference; name = "RNSVG.xcodeproj"; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		797605D76B954112942ACBFE /* libRNSVG.a */ = {isa = PBXFileReference; name = "libRNSVG.a"; path = "libRNSVG.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		318913843AB241E097A2A802 /* libRNSVG-tvOS.a */ = {isa = PBXFileReference; name = "libRNSVG-tvOS.a"; path = "libRNSVG-tvOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		8908ECCCE2CA4CE68BB31831 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; name = "Montserrat-Bold.ttf"; path = "../js/res/fonts/Montserrat-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		8A2C13CA9705426CB8BF4775 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; name = "Montserrat-Regular.ttf"; path = "../js/res/fonts/Montserrat-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+    
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -597,7 +601,9 @@
 				00E356EF1AD99517003FC87E /* AmadeusMobileTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+
 				CE179356CE794AA7AAA8B012 /* Resources */,
+
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -624,11 +630,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+
 		CE179356CE794AA7AAA8B012 /* Resources */ = {
 			isa = "PBXGroup";
 			children = (
 				8908ECCCE2CA4CE68BB31831 /* Montserrat-Bold.ttf */,
 				8A2C13CA9705426CB8BF4775 /* Montserrat-Regular.ttf */,
+
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1080,8 +1088,10 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+
 				E2B7CCAF29AE4F1CBD2AABCB /* Montserrat-Bold.ttf in Resources */,
 				90BA36F1731F42038BC29E34 /* Montserrat-Regular.ttf in Resources */,
+
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
