@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const baseURL = 'http://192.168.1.67:3000';
+const baseURL = 'https://amadeus-mobile.herokuapp.com/';
 
 export async function sendMessage(message) {
     return new Promise((resolve, reject) => {
         axios
-            .post(`${baseURL}/api/message`, message)
+            .post(`${baseURL}/api/message`, JSON.stringify(message))
             .then((response) => {
                 const responseData = response.data;
 

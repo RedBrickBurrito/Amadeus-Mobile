@@ -43,15 +43,7 @@ var defaultNavigatorType = UNSET;
 
 handleSendMessage = (message) => {
   {
-  Alert.alert(
-    'testing',
-    message,
-    [
-      {text: 'Ok'}
-    ],
-    {cancelable: true}
-  )
-  sendMessage(message)
+  sendMessage(JSON.stringify(message))
     .then((responseData) => {
      Alert.alert(
        'Success',
@@ -65,7 +57,7 @@ handleSendMessage = (message) => {
     .catch((responseData) => {
       Alert.alert(
         'Failure',
-        responseData.message,
+        JSON.stringify(responseData.message),
         [
           {text: 'Ok'}
         ],
