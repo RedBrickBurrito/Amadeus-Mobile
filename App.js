@@ -7,21 +7,20 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-import React, { Component } from "react";
+import React, { Component, useState} from "react";
 import {
-  AppRegistry,
-  Text,
   View,
   StyleSheet,
-  PixelRatio,
   TouchableHighlight,
-  TextInput,
   SafeAreaView,
+  Alert
 } from "react-native";
 
-import { ViroVRSceneNavigator, ViroARSceneNavigator } from "react-viro";
+import {ViroARSceneNavigator } from "react-viro";
 import ToggleSwitch  from "toggle-switch-react-native";
-
+import * as eva from '@eva-design/eva';
+import { ApplicationProvider, Text, Button, Icon, IconRegistry, Input} from '@ui-kitten/components';
+import {sendMessage} from './js/sendMessageService';
 /*
  TODO: Insert your API key below
  */
@@ -40,6 +39,54 @@ var AR_NAVIGATOR_TYPE = "AR";
 // This determines which type of experience to launch in, or UNSET, if the user should
 // be presented with a choice of AR or VR. By default, we offer the user a choice.
 var defaultNavigatorType = UNSET;
+
+
+handleSendMessage = (message) => {
+  {
+  sendMessage(JSON.stringify(message))
+    .then((responseData) => {
+     Alert.alert(
+       'Success',
+       responseData.message,
+       [
+         {text: 'Ok'}
+       ],
+       {cancelable: true}
+     )
+    })
+    .catch((responseData) => {
+      Alert.alert(
+        'Failure',
+        JSON.stringify(responseData.message),
+        [
+          {text: 'Ok'}
+        ],
+        {cancelable: true}
+      )
+    })
+  } 
+  }
+
+
+
+const TextInputHandler = () => {
+  const [value, setValue] = React.useState('');
+  
+  return (
+    <>
+
+    <Input
+    placeholder="What are you thinking?"
+    onChangeText={nextValue => setValue(nextValue)}
+    value={value}
+    status='danger'
+    style={localStyles.textInput}
+  />
+  <Button size="small" style={localStyles.sendButton} status='danger' onPress={() => handleSendMessage(value)} onPressOut={() => setValue('')} >Send</Button>
+  
+  </>
+  );
+}
 
 export default class ViroSample extends Component {
   constructor() {
@@ -71,6 +118,8 @@ export default class ViroSample extends Component {
   // Presents the user with a choice of an AR or VR experience
   _getExperienceSelector() {
     return (
+      <>
+      <ApplicationProvider {...eva} theme={eva.dark}>
       <View style={localStyles.outer}>
         <View style={localStyles.inner}>
           <Text style={localStyles.titleText}>
@@ -93,12 +142,15 @@ export default class ViroSample extends Component {
           </TouchableHighlight>
         </View>
       </View>
+      </ApplicationProvider>
+      </>
     );
   }
 
   // Returns the ViroARSceneNavigator which will start the AR experience
   _getARNavigator() {
     return (
+      <ApplicationProvider {...eva} theme={eva.dark}>
       <SafeAreaView style={{ flex: 1, bottom: 0 }}>
         <View style={{alignSelf:"flex-end", flexDirection:"row",backgroundColor: "black", height: "7%", marginTop:10}}>
         <ToggleSwitch
@@ -116,11 +168,9 @@ export default class ViroSample extends Component {
           {...this.state.sharedProps}
           initialScene={{ scene: InitialARScene }}
         />
-        <TextInput
-          placeholder="What are you thinking?"
-          style={localStyles.textInput}
-        />
+       <TextInputHandler />
       </SafeAreaView>
+      </ApplicationProvider>
     );
   }
 
@@ -204,14 +254,22 @@ var localStyles = StyleSheet.create({
     borderColor: "#fff",
   },
   textInput: {
-    backgroundColor: "white",
-    alignSelf: "center",
+    backgroundColor: "black",
+    alignSelf: "flex-start",
     width: "80%",
     borderRadius: 20,
     paddingLeft: 15,
-    height: "5%",
-    bottom: "7%",
+    height: "8%",
+    bottom: -14,
   },
+  sendButton: {
+    alignItems: "center",
+    padding: 10,
+    bottom: 54,
+    left: 340,
+    width:"16%",
+    height:"5%",
+  }
 });
 
 module.exports = ViroSample;
