@@ -28,14 +28,16 @@ function Signup() {
   const [psswd, setpsswd] = useState('');
   const history = useHistory();
 
-  const createTwoButtonAlert = (data) =>
+  const createAlert = (data) =>
     Alert.alert(data.title, data.message, [
       {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
+        text: 'OK',
+        onPress: () => {
+          if (data.title == 'Success') {
+            history.push('/login');
+          }
+        },
       },
-      { text: 'OK', onPress: () => console.log('OK Pressed') },
     ]);
 
   const handleSubmit = () => {
@@ -46,13 +48,13 @@ function Signup() {
 
       signUp(data)
         .then((responseData) => {
-          createTwoButtonAlert({
+          createAlert({
             title: 'Success',
             message: responseData.message,
           });
         })
         .catch((responseData) => {
-          createTwoButtonAlert({
+          createAlert({
             title: 'Error',
             message: responseData.message,
           });

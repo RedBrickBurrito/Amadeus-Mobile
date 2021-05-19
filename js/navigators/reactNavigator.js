@@ -7,7 +7,7 @@ import { NativeRouter, Route } from 'react-router-native';
 export default function ReactNavigator() {
   return (
     <NativeRouter>
-      <Route exact path="/" component={Signup} />
+      <Route exact path={['/', '/signup']} component={Signup} />
       <Route path="/login" component={Login} />
       <Route path="/viro" component={ViroNavigator} />
     </NativeRouter>
