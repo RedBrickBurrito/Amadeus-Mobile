@@ -41,13 +41,13 @@ var AR_NAVIGATOR_TYPE = "AR";
 var defaultNavigatorType = UNSET;
 
 
-handleSendMessage = (message) => {
+handleSendMessage = (messageToSend) => {
   {
-  sendMessage(JSON.stringify(message))
+  sendMessage(messageToSend)
     .then((responseData) => {
      Alert.alert(
        'Success',
-       JSON.stringify(responseData.message),
+       responseData.message,
        [
          {text: 'Ok'}
        ],
@@ -57,7 +57,7 @@ handleSendMessage = (message) => {
     .catch((responseData) => {
       Alert.alert(
         'Failure',
-        JSON.stringify(responseData.message),
+        responseData.message,
         [
           {text: 'Ok'}
         ],
