@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = 'https://amadeus-mobile.herokuapp.com/';
+const baseURL = 'https://amadeus-ar.herokuapp.com';
 
 export async function sendMessage(message) {
     return new Promise((resolve, reject) => {
