@@ -1,10 +1,9 @@
-import axios from "axios"
 
-const baseURL = 'https://amadeus-ar.herokuapp.com'
+const baseURLSignUp = 'https://amadeus-ar.herokuapp.com'
 
 export async function signUp(data){
     return new Promise((resolve, reject) =>{ 
-        axios.post(`${baseURL}/api/signUp`, data).then((response)=>{
+        axios.post(`${baseURLSignUp}/api/signUp`, data).then((response)=>{
             const responseData = response.data;
 
             resolve(responseData);
@@ -21,3 +20,4 @@ export async function signUp(data){
         
     });
 }
+
