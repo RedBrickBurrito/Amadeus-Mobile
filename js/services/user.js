@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const baseURL = 'http://192.168.100.8:4321'
+const baseURL = 'https://amadeus-ar.herokuapp.com'
 
 export async function signUp(data){
     return new Promise((resolve, reject) =>{ 
