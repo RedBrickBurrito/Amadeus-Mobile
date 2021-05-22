@@ -3,15 +3,21 @@
 import React, { Component } from 'react';
 
 import {StyleSheet, TextInput, View} from 'react-native';
+import { connect } from 'react-redux';
+import { changeText } from '../actions/textChanged';
+import { bindActionCreators} from 'redux';
+import { textChangeReducer} from '../reducers/textChangeReducer';
 
 import {
   ViroARScene,
   Viro3DObject,
   ViroAmbientLight,
   ViroARPlaneSelector,
+  ViroText,
+  VRTTEX
 } from 'react-viro';
 
-export default class HelloWorldSceneAR extends Component {
+export class HelloWorldSceneAR extends Component {
   constructor() {
     super();
 
@@ -27,6 +33,16 @@ export default class HelloWorldSceneAR extends Component {
     return (
       <ViroARScene onTrackingUpdated={this._onInitialized} >
         <ViroAmbientLight color={"#aaaaaa"} />
+        <ViroText
+    text=""
+    textAlign="left"
+    textAlignVertical="top"
+    textClipMode="clipToBounds"
+    color="#000000"
+    width={2} height={2}
+    style={{fontFamily:"Arial", fontSize:20, fontStyle:"bold", color:"#0000FF"}}
+    position={[0,0,-5]}
+ />
         <Viro3DObject
             source={require('./res/scene.gltf')}
             resources={[require('./res/scene.bin'),
@@ -45,6 +61,18 @@ export default class HelloWorldSceneAR extends Component {
 
 }
 
+const mapStateToProps = state => ({
+  text: state.text,
+});
+
+const ActionCreators = Object.assign(
+  {},
+  changeText,
+);
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(ActionCreators, dispatch),
+});
+
 var styles = StyleSheet.create({
   helloWorldTextStyle: {
     fontFamily: 'Arial',
@@ -56,3 +84,4 @@ var styles = StyleSheet.create({
 });
 
 module.exports = HelloWorldSceneAR;
+export default connect(mapStateToProps, mapDispatchToProps)(HelloWorldSceneAR);

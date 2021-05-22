@@ -7,20 +7,30 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-import React, { Component, useState} from "react";
+import React, { Component } from "react";
 import {
   View,
   StyleSheet,
   TouchableHighlight,
   SafeAreaView,
-  Alert
+  Alert,
 } from "react-native";
 
-import {ViroARSceneNavigator } from "react-viro";
-import ToggleSwitch  from "toggle-switch-react-native";
-import * as eva from '@eva-design/eva';
-import { ApplicationProvider, Text, Button, Icon, IconRegistry, Input} from '@ui-kitten/components';
-import {sendMessage} from './js/services/sendMessageService';
+import { ViroARSceneNavigator } from "react-viro";
+import ToggleSwitch from "toggle-switch-react-native";
+import * as eva from "@eva-design/eva";
+import {
+  ApplicationProvider,
+  Text,
+  Button,
+  Input,
+} from "@ui-kitten/components";
+import { sendMessage } from "./js/services/sendMessageService";
+import { handleSendMessageToBeDisplayed } from "./js/mainARScene.js";
+import { connect } from "react-redux";
+import { changeText } from "./actions/textChanged";
+import { bindActionCreators } from "redux";
+
 /*
  TODO: Insert your API key below
  */
@@ -40,55 +50,68 @@ var AR_NAVIGATOR_TYPE = "AR";
 // be presented with a choice of AR or VR. By default, we offer the user a choice.
 var defaultNavigatorType = UNSET;
 
-
-handleSendMessage = (messageToSend) => {
-  {
-  sendMessage(messageToSend)
-    .then((responseData) => {
-     Alert.alert(
-       'Success',
-       responseData.message,
-       [
-         {text: 'Ok'}
-       ],
-       {cancelable: true}
-     )
-    })
-    .catch((responseData) => {
-      Alert.alert(
-        'Failure',
-        responseData.message,
-        [
-          {text: 'Ok'}
-        ],
-        {cancelable: true}
-      )
-    })
-  } 
-  }
-
-
-
-const TextInputHandler = () => {
-  const [value, setValue] = React.useState('');
-  
-  return (
-    <>
-
-    <Input
-    placeholder="What are you thinking?"
-    onChangeText={nextValue => setValue(nextValue)}
-    value={value}
-    status='danger'
-    style={localStyles.textInput}
-  />
-  <Button size="small" style={localStyles.sendButton} status='danger' onPress={() => handleSendMessage(value)} onPressOut={() => setValue('')} >Send</Button>
-  
-  </>
-  );
+export function sendMessageToBeDisplayed(state) {
+  const newState = { ...state, newText: text };
+  return newState;
 }
 
-export default class ViroSample extends Component {
+class App extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      value: "",
+    };
+
+    this.handleSendMessage = this.handleSendMessage.bind(this);
+  }
+
+  handleSendMessage = (messageToSend) => {
+    let {actions} = this.props;
+    {
+      sendMessage(messageToSend)
+        .then((responseData) => {
+          changeText(responseData.message)
+          Alert.alert("Success", responseData.message, [{ text: "Ok" }], {
+            cancelable: true,
+          });
+        })
+        .catch((responseData) => {
+          changeText(responseData.message)
+          Alert.alert(
+            "Failure",
+            responseData.message,
+            [{ text: "Ok" }],
+            { cancelable: true }
+          );
+        });
+    }
+  };
+  render() {
+    return (
+      <>
+        <Input
+          placeholder="What are you thinking?"
+          onChangeText={(nextValue) => this.setState({ value: nextValue })}
+          value={this.state.value}
+          status="danger"
+          style={localStyles.textInput}
+        />
+        <Button
+          size="small"
+          style={localStyles.sendButton}
+          status="danger"
+          onPress={() => this.handleSendMessage(this.state.value)}
+          onPressOut={() => this.setState({value: ''})}
+        >
+          Send
+        </Button>
+      </>
+    );
+  }
+}
+
+export class ViroSample extends Component {
   constructor() {
     super();
 
@@ -99,50 +122,52 @@ export default class ViroSample extends Component {
     this._getExperienceSelector = this._getExperienceSelector.bind(this);
     this._getARNavigator = this._getARNavigator.bind(this);
     //this._getVRNavigator = this._getVRNavigator.bind(this);
-    this._getExperienceButtonOnPress = this._getExperienceButtonOnPress.bind(this);
+    this._getExperienceButtonOnPress =
+      this._getExperienceButtonOnPress.bind(this);
     this._exitViro = this._exitViro.bind(this);
   }
 
   // Replace this function with the contents of _getVRNavigator() or _getARNavigator()
   // if you are building a specific type of experience.
   render() {
-      if (this.state.navigatorType == UNSET) {
-        return this._getExperienceSelector();
-      } else if (this.state.navigatorType == AR_NAVIGATOR_TYPE2) {
-        return this._getARNavigator2();
-      } else if (this.state.navigatorType == AR_NAVIGATOR_TYPE) {
-        return this._getARNavigator();
-      }
+    if (this.state.navigatorType == UNSET) {
+      return this._getExperienceSelector();
+    } else if (this.state.navigatorType == AR_NAVIGATOR_TYPE2) {
+      return this._getARNavigator2();
+    } else if (this.state.navigatorType == AR_NAVIGATOR_TYPE) {
+      return this._getARNavigator();
     }
+  }
 
   // Presents the user with a choice of an AR or VR experience
   _getExperienceSelector() {
     return (
       <>
-      <ApplicationProvider {...eva} theme={eva.dark}>
-      <View style={localStyles.outer}>
-        <View style={localStyles.inner}>
-          <Text style={localStyles.titleText}>
-            Choose your desired experience:
-          </Text>
+        <ApplicationProvider {...eva} theme={eva.dark}>
+          <View style={localStyles.outer}>
+            <View style={localStyles.inner}>
+              <Text style={localStyles.titleText}>
+                Choose your desired experience:
+              </Text>
 
-          <TouchableHighlight
-            style={localStyles.buttons}
-            onPress={this._getExperienceButtonOnPress(AR_NAVIGATOR_TYPE)}
-            underlayColor={'#68a0ff'} >
+              <TouchableHighlight
+                style={localStyles.buttons}
+                onPress={this._getExperienceButtonOnPress(AR_NAVIGATOR_TYPE)}
+                underlayColor={"#68a0ff"}
+              >
+                <Text style={localStyles.buttonText}>AR</Text>
+              </TouchableHighlight>
 
-            <Text style={localStyles.buttonText}>AR</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight style={localStyles.buttons}
-            onPress={this._getExperienceButtonOnPress(AR_NAVIGATOR_TYPE2)}
-            underlayColor={'#68a0ff'} >
-
-            <Text style={localStyles.buttonText}>NO-AR</Text>
-          </TouchableHighlight>
-        </View>
-      </View>
-      </ApplicationProvider>
+              <TouchableHighlight
+                style={localStyles.buttons}
+                onPress={this._getExperienceButtonOnPress(AR_NAVIGATOR_TYPE2)}
+                underlayColor={"#68a0ff"}
+              >
+                <Text style={localStyles.buttonText}>NO-AR</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </ApplicationProvider>
       </>
     );
   }
@@ -151,25 +176,38 @@ export default class ViroSample extends Component {
   _getARNavigator() {
     return (
       <ApplicationProvider {...eva} theme={eva.dark}>
-      <SafeAreaView style={{ flex: 1, bottom: 0 }}>
-        <View style={{alignSelf:"flex-end", flexDirection:"row",backgroundColor: "black", height: "7%", marginTop:10}}>
-        <ToggleSwitch
-          isOn={false}
-          onColor="green"
-          offColor="grey"
-          label="Turn off AR"
-          labelStyle={{ color: "white", fontWeight: "900", right: 90, top: 20}}
-          size="medium"
-          onToggle={isOn => console.log("changed to : ", isOn)}
-          style={{marginTop:10, left: 30}}
-        />
-        </View>
-        <ViroARSceneNavigator
-          {...this.state.sharedProps}
-          initialScene={{ scene: InitialARScene }}
-        />
-       <TextInputHandler />
-      </SafeAreaView>
+        <SafeAreaView style={{ flex: 1, bottom: 0 }}>
+          <View
+            style={{
+              alignSelf: "flex-end",
+              flexDirection: "row",
+              backgroundColor: "black",
+              height: "7%",
+              marginTop: 10,
+            }}
+          >
+            <ToggleSwitch
+              isOn={false}
+              onColor="green"
+              offColor="grey"
+              label="Turn off AR"
+              labelStyle={{
+                color: "white",
+                fontWeight: "900",
+                right: 90,
+                top: 20,
+              }}
+              size="medium"
+              onToggle={(isOn) => console.log("changed to : ", isOn)}
+              style={{ marginTop: 10, left: 30 }}
+            />
+          </View>
+          <ViroARSceneNavigator
+            {...this.state.sharedProps}
+            initialScene={{ scene: InitialARScene }}
+          />
+          <App />
+        </SafeAreaView>
       </ApplicationProvider>
     );
   }
@@ -178,25 +216,38 @@ export default class ViroSample extends Component {
   _getARNavigator2() {
     return (
       <ApplicationProvider {...eva} theme={eva.dark}>
-      <SafeAreaView style={{ flex: 1, bottom: 0 }}>
-        <View style={{alignSelf:"flex-end", flexDirection:"row",backgroundColor: "black", height: "7%", marginTop:10}}>
-        <ToggleSwitch
-          isOn={false}
-          onColor="green"
-          offColor="grey"
-          label="Turn off AR"
-          labelStyle={{ color: "white", fontWeight: "900", right: 90, top: 20}}
-          size="medium"
-          onToggle={isOn => console.log("changed to : ", isOn)}
-          style={{marginTop:10, left: 30}}
-        />
-        </View>
-        <ViroARSceneNavigator
-          {...this.state.sharedProps}
-          initialScene={{ scene: SecondaryARScene }}
-        />
-       <TextInputHandler />
-      </SafeAreaView>
+        <SafeAreaView style={{ flex: 1, bottom: 0 }}>
+          <View
+            style={{
+              alignSelf: "flex-end",
+              flexDirection: "row",
+              backgroundColor: "black",
+              height: "7%",
+              marginTop: 10,
+            }}
+          >
+            <ToggleSwitch
+              isOn={false}
+              onColor="green"
+              offColor="grey"
+              label="Turn off AR"
+              labelStyle={{
+                color: "white",
+                fontWeight: "900",
+                right: 90,
+                top: 20,
+              }}
+              size="medium"
+              onToggle={(isOn) => console.log("changed to : ", isOn)}
+              style={{ marginTop: 10, left: 30 }}
+            />
+          </View>
+          <ViroARSceneNavigator
+            {...this.state.sharedProps}
+            initialScene={{ scene: SecondaryARScene }}
+          />
+          <App />
+        </SafeAreaView>
       </ApplicationProvider>
     );
   }
@@ -218,6 +269,15 @@ export default class ViroSample extends Component {
     });
   }
 }
+
+const mapStateToProps = (state) => ({
+  text: state.text,
+});
+
+const ActionCreators = Object.assign({}, changeText);
+const mapDispatchToProps = (dispatch) => ({
+  actions: bindActionCreators(ActionCreators, dispatch),
+});
 
 var localStyles = StyleSheet.create({
   viroContainer: {
@@ -286,9 +346,10 @@ var localStyles = StyleSheet.create({
     padding: 10,
     bottom: 54,
     left: 340,
-    width:"16%",
-    height:"5%",
-  }
+    width: "16%",
+    height: "5%",
+  },
 });
 
 module.exports = ViroSample;
+export default connect(mapStateToProps, mapDispatchToProps)(App);
