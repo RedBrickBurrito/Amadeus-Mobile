@@ -20,7 +20,7 @@ import {ViroARSceneNavigator } from "react-viro";
 import ToggleSwitch  from "toggle-switch-react-native";
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider, Text, Button, Icon, IconRegistry, Input} from '@ui-kitten/components';
-import {sendMessage} from './js/sendMessageService';
+import {sendMessage} from './js/services/sendMessageService';
 /*
  TODO: Insert your API key below
  */
@@ -41,9 +41,9 @@ var AR_NAVIGATOR_TYPE = "AR";
 var defaultNavigatorType = UNSET;
 
 
-handleSendMessage = (message) => {
+handleSendMessage = (messageToSend) => {
   {
-  sendMessage(JSON.stringify(message))
+  sendMessage(messageToSend)
     .then((responseData) => {
      Alert.alert(
        'Success',
@@ -57,7 +57,7 @@ handleSendMessage = (message) => {
     .catch((responseData) => {
       Alert.alert(
         'Failure',
-        JSON.stringify(responseData.message),
+        responseData.message,
         [
           {text: 'Ok'}
         ],
@@ -177,8 +177,27 @@ export default class ViroSample extends Component {
   // Returns the ViroSceneNavigator which will start the VR experience
   _getARNavigator2() {
     return (
-      <ViroARSceneNavigator {...this.state.sharedProps}
-        initialScene={{scene: SecondaryARScene}} />
+      <ApplicationProvider {...eva} theme={eva.dark}>
+      <SafeAreaView style={{ flex: 1, bottom: 0 }}>
+        <View style={{alignSelf:"flex-end", flexDirection:"row",backgroundColor: "black", height: "7%", marginTop:10}}>
+        <ToggleSwitch
+          isOn={false}
+          onColor="green"
+          offColor="grey"
+          label="Turn off AR"
+          labelStyle={{ color: "white", fontWeight: "900", right: 90, top: 20}}
+          size="medium"
+          onToggle={isOn => console.log("changed to : ", isOn)}
+          style={{marginTop:10, left: 30}}
+        />
+        </View>
+        <ViroARSceneNavigator
+          {...this.state.sharedProps}
+          initialScene={{ scene: SecondaryARScene }}
+        />
+       <TextInputHandler />
+      </SafeAreaView>
+      </ApplicationProvider>
     );
   }
 
