@@ -19,7 +19,7 @@ import {
 import { ViroARSceneNavigator } from 'react-viro';
 import ToggleSwitch from 'toggle-switch-react-native';
 import { Text, Button, Input } from '@ui-kitten/components';
-import { sendMessage } from '../sendMessageService';
+import { sendMessage } from '../services/sendMessageService';
 /*
   TODO: Insert your API key below
   */
