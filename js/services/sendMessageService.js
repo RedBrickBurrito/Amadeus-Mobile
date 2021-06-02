@@ -7,12 +7,12 @@ export async function sendMessage(message) {
         axios
             .post(`${baseURL}/api/message`, { "message": JSON.stringify(message)})
             .then((response) => {
-                const responseData = response.message;
+                const responseData = response;
 
                 resolve(responseData);
             })
             .catch((error) => {
-                const responseData = error.response.message;
+                const responseData = error.response;
                 if (responseData.error) {
                     console.log('server error');
                     console.log(responseData.error);

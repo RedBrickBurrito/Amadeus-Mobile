@@ -71,16 +71,14 @@ class App extends Component {
     {
       sendMessage(messageToSend)
         .then((responseData) => {
-          changeText(responseData.message)
-          Alert.alert("Success", responseData.message, [{ text: "Ok" }], {
+          Alert.alert("Success", responseData.data, [{ text: "Ok" }], {
             cancelable: true,
           });
         })
         .catch((responseData) => {
-          changeText(responseData.message)
           Alert.alert(
             "Failure",
-            responseData.message,
+            responseData.data,
             [{ text: "Ok" }],
             { cancelable: true }
           );
