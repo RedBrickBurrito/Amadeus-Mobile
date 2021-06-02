@@ -1,12 +1,12 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 
 import {StyleSheet, TextInput, View} from 'react-native';
 import { connect } from 'react-redux';
 import { changeText } from '../actions/textChanged';
 import { bindActionCreators} from 'redux';
-import { textChangeReducer} from '../reducers/textChangeReducer';
+import { ReactReduxContext } from 'react-redux';
 
 import {
   ViroARScene,
@@ -23,24 +23,32 @@ export class HelloWorldSceneAR extends Component {
 
     // Set initial state here
     this.state = {
-      text : "Initializing AR..."
+      text : "Initializing AR...",
+      textChanged: "Hello",
     };
+
+    this.updateTextResponse = this.updateTextResponse.bind(this);
+
+  }
+
+  updateTextResponse = () => {
+    const {store} = useContext(ReactReduxContext);
+    this.setState({textChanged: store.getState()})
 
   }
 
   render() {
-
     return (
       <ViroARScene onTrackingUpdated={this._onInitialized} >
         <ViroAmbientLight color={"#aaaaaa"} />
         <ViroText
-    text=""
+    text={this.state.textChanged}
     textAlign="left"
     textAlignVertical="top"
     textClipMode="clipToBounds"
     color="#000000"
     width={2} height={2}
-    style={{fontFamily:"Arial", fontSize:20, fontStyle:"bold", color:"#0000FF"}}
+    style={{fontFamily:"Arial", fontSize:20, color:"#0000FF"}}
     position={[0,0,-5]}
  />
         <Viro3DObject

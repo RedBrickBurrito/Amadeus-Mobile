@@ -26,7 +26,6 @@ import {
   Input,
 } from "@ui-kitten/components";
 import { sendMessage } from "./js/services/sendMessageService";
-import { handleSendMessageToBeDisplayed } from "./js/mainARScene.js";
 import { connect } from "react-redux";
 import { changeText } from "./actions/textChanged";
 import { bindActionCreators } from "redux";
@@ -67,21 +66,20 @@ class App extends Component {
   }
 
   handleSendMessage = (messageToSend) => {
-    let {actions} = this.props;
+    let { actions } = this.props;
     {
       sendMessage(messageToSend)
         .then((responseData) => {
+          changeText(responseData.data);
           Alert.alert("Success", responseData.data, [{ text: "Ok" }], {
             cancelable: true,
           });
         })
         .catch((responseData) => {
-          Alert.alert(
-            "Failure",
-            responseData.data,
-            [{ text: "Ok" }],
-            { cancelable: true }
-          );
+          changeText(responseData.data);
+          Alert.alert("Failure", responseData.data, [{ text: "Ok" }], {
+            cancelable: true,
+          });
         });
     }
   };
@@ -100,7 +98,7 @@ class App extends Component {
           style={localStyles.sendButton}
           status="danger"
           onPress={() => this.handleSendMessage(this.state.value)}
-          onPressOut={() => this.setState({value: ''})}
+          onPressOut={() => this.setState({ value: "" })}
         >
           Send
         </Button>
