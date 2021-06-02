@@ -123,6 +123,8 @@ function Login() {
               style={styles.textInput}
               placeholder="E-mail"
               placeholderTextColor="#F5F3F4"
+              keyboardType="email-address"
+              autoCapitalize="none"
               value={email}
               onChangeText={(value) => handleChangeText(value, "email")}
             />
@@ -133,6 +135,7 @@ function Login() {
               secureTextEntry
               placeholder="Password"
               placeholderTextColor="#F5F3F4"
+              autoCapitalize="none"
               value={password}
               onChangeText={(value) => handleChangeText(value, "pwd")}
             />
