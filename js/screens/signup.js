@@ -126,6 +126,8 @@ function Signup() {
                 <TextInput
                   style={styles.input}
                   value={email}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
                   onChangeText={(value) => handleChangeText(value, 'email')}
                 />
               </View>
@@ -134,6 +136,8 @@ function Signup() {
                 <TextInput
                   style={styles.input}
                   value={psswd}
+                  secureTextEntry
+                  autoCapitalize="none"
                   onChangeText={(value) => handleChangeText(value, 'psswd')}
                 />
               </View>
