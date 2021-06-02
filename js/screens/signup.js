@@ -44,7 +44,7 @@ function Signup() {
     const validated = validate();
 
     if (validated) {
-      const data = { email: email, password: psswd };
+      const data = { name: name, email: email, password: psswd };
 
       signUp(data)
         .then((responseData) => {
