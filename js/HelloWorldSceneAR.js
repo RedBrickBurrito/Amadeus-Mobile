@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from "react-native";
 
 import {
   ViroARScene,
@@ -13,17 +13,16 @@ import {
   ViroARCamera,
   ViroAnimatedImage,
   ViroImage,
-  ViroVideo
-} from 'react-viro';
+  ViroVideo,
+} from "react-viro";
 
 export default class HelloWorldSceneAR extends Component {
-
   constructor() {
     super();
 
     // Set initial state here
     this.state = {
-      text : "Initializing AR..."
+      text: "Initializing AR...",
     };
 
     // bind 'this' to functions
@@ -31,48 +30,34 @@ export default class HelloWorldSceneAR extends Component {
   }
 
   render() {
-
     const { showArCameraView } = this.props;
 
     return (
-      <ViroARScene onTrackingUpdated={this._onInitialized} >
+      <ViroARScene onTrackingUpdated={this._onInitialized}>
         <ViroAmbientLight color={"#aaaaaa"} />
 
         <ViroARCamera>
-         <ViroAnimatedImage
-          height={2}
-          width={1}
-          placeholderSource={require("./res/background.gif")}
-          source={require("./res/background.gif")}
-          position={[0, 0, -1]}
-        />    
-         {/* <ViroVideo
-          source={require('./res/monitaChina.mp4')}
-          loop={true}
-          position={[0,0,-2]}
-          scale={[1.5, 3, 0]}
-         />  */}
-
-        {/* <ViroImage
+          <ViroAnimatedImage
             height={2}
-            width={2}
-            placeholderSource={require("./res/Mikasa1.jpg")}
-            source={require("./res/Mikasa1.jpg")}
+            width={1}
+            placeholderSource={require("./res/background.gif")}
+            source={require("./res/background.gif")}
             position={[0, 0, -1]}
-        /> */}
+          />
+        
 
-        <Viro3DObject
-            source={require('./res/scene.gltf')}
-            resources={[require('./res/scene.bin'),
-                        require('./res/textures/Material_-_Base_baseColor.png'),
-                        require('./res/textures/Material_-_Rostro_baseColor.png')]}
+          <Viro3DObject
+            source={require("./res/scene.gltf")}
+            resources={[
+              require("./res/scene.bin"),
+              require("./res/textures/Material_-_Base_baseColor.png"),
+              require("./res/textures/Material_-_Rostro_baseColor.png"),
+            ]}
             position={[0, 0, -0.5]}
-            scale={[.3, .3, .3]}
-            animation={{name:'Pose 1',
-          run:true,
-        loop:true,
-      delay:1000}}
-            type="GLTF" />
+            scale={[0.3, 0.3, 0.3]}
+            animation={{ name: "Pose 1", run: true, loop: true, delay: 1000 }}
+            type="GLTF"
+          />
         </ViroARCamera>
       </ViroARScene>
     );
@@ -81,7 +66,7 @@ export default class HelloWorldSceneAR extends Component {
   _onInitialized(state, reason) {
     if (state == ViroConstants.TRACKING_NORMAL) {
       this.setState({
-        text : "Hello World!"
+        text: "Hello World!",
       });
     } else if (state == ViroConstants.TRACKING_NONE) {
       // Handle loss of tracking
@@ -91,11 +76,11 @@ export default class HelloWorldSceneAR extends Component {
 
 var styles = StyleSheet.create({
   helloWorldTextStyle: {
-    fontFamily: 'Arial',
+    fontFamily: "Arial",
     fontSize: 30,
-    color: '#ffffff',
-    textAlignVertical: 'center',
-    textAlign: 'center',  
+    color: "#ffffff",
+    textAlignVertical: "center",
+    textAlign: "center",
   },
 });
 

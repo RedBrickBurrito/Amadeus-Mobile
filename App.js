@@ -26,9 +26,6 @@ import {
   Input,
 } from "@ui-kitten/components";
 import { sendMessage } from "./js/services/sendMessageService";
-import { connect } from "react-redux";
-import { changeText } from "./actions/textChanged";
-import { bindActionCreators } from "redux";
 
 /*
  TODO: Insert your API key below
@@ -66,17 +63,14 @@ class App extends Component {
   }
 
   handleSendMessage = (messageToSend) => {
-    let { actions } = this.props;
     {
       sendMessage(messageToSend)
         .then((responseData) => {
-          changeText(responseData.data);
-          Alert.alert("Success", responseData.data, [{ text: "Ok" }], {
+          Alert.alert("Amadeus says:", responseData.data, [{ text: "Close" }], {
             cancelable: true,
           });
         })
         .catch((responseData) => {
-          changeText(responseData.data);
           Alert.alert("Failure", responseData.data, [{ text: "Ok" }], {
             cancelable: true,
           });
@@ -266,15 +260,6 @@ export class ViroSample extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  text: state.text,
-});
-
-const ActionCreators = Object.assign({}, changeText);
-const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(ActionCreators, dispatch),
-});
-
 var localStyles = StyleSheet.create({
   viroContainer: {
     flex: 1,
@@ -348,4 +333,3 @@ var localStyles = StyleSheet.create({
 });
 
 module.exports = ViroSample;
-export default connect(mapStateToProps, mapDispatchToProps)(App);

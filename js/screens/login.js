@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   SafeAreaView,
   View,
@@ -6,14 +6,14 @@ import {
   TextInput,
   Text,
   Alert,
-} from 'react-native';
-import * as eva from '@eva-design/eva';
-import { ApplicationProvider, Button } from '@ui-kitten/components';
-import { logIn } from '../services/user';
+} from "react-native";
+import * as eva from "@eva-design/eva";
+import { ApplicationProvider, Button } from "@ui-kitten/components";
+import { logIn } from "../services/user";
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [inputStatus, setInputStatus] = useState({
     email: true,
     password: true,
@@ -22,11 +22,11 @@ function Login() {
   const createTwoButtonAlert = (data) =>
     Alert.alert(data.title, data.message, [
       {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
       },
-      { text: 'OK', onPress: () => console.log('OK Pressed') },
+      { text: "OK", onPress: () => console.log("OK Pressed") },
     ]);
 
   const validate = () => {
@@ -68,13 +68,13 @@ function Login() {
       logIn(data)
         .then((responseData) => {
           createTwoButtonAlert({
-            title: 'Success',
+            title: "Success",
             message: responseData.message,
           });
         })
         .catch((responseData) => {
           createTwoButtonAlert({
-            title: 'Error',
+            title: "Error",
             message: responseData.message,
           });
         });
@@ -82,11 +82,11 @@ function Login() {
   };
 
   const handleChangeText = (value, type) => {
-    if (type == 'pwd') {
+    if (type == "pwd") {
       setPassword(value);
     }
 
-    if (type == 'email') {
+    if (type == "email") {
       setEmail(value);
     }
   };
@@ -96,7 +96,7 @@ function Login() {
       <View style={styles.container}>
         <Text
           style={styles.backText}
-          onPress={() => console.log('pressed the back button')}
+          onPress={() => console.log("pressed the back button")}
         >
           ᐸ
         </Text>
@@ -108,7 +108,7 @@ function Login() {
               placeholder="E-mail"
               placeholderTextColor="#F5F3F4"
               value={email}
-              onChangeText={(value) => handleChangeText(value, 'email')}
+              onChangeText={(value) => handleChangeText(value, "email")}
             />
           </View>
           <View style={inputStatus.email ? styles.input : styles.inputDanger}>
@@ -118,7 +118,7 @@ function Login() {
               placeholder="Password"
               placeholderTextColor="#F5F3F4"
               value={password}
-              onChangeText={(value) => handleChangeText(value, 'pwd')}
+              onChangeText={(value) => handleChangeText(value, "pwd")}
             />
           </View>
         </View>
@@ -135,7 +135,7 @@ function Login() {
             <Text style={styles.footerText}>Don't have an account? </Text>
             <Text
               style={styles.footerButtonText}
-              onPress={() => console.log('pressed the sign up button')}
+              onPress={() => console.log("pressed the sign up button")}
             >
               Sign Up
             </Text>
@@ -148,80 +148,80 @@ function Login() {
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
-    width: '100%',
-    display: 'flex',
-    paddingHorizontal: '10%',
-    paddingTop: '10%',
-    backgroundColor: '#161214',
-    justifyContent: 'space-evenly',
+    height: "100%",
+    width: "100%",
+    display: "flex",
+    paddingHorizontal: "10%",
+    paddingTop: "10%",
+    backgroundColor: "#161214",
+    justifyContent: "space-evenly",
   },
   title: {
-    fontFamily: 'Monserrat-Bold',
-    fontWeight: 'bold',
+    fontFamily: "Monserrat-Bold",
+    fontWeight: "bold",
     fontSize: 64,
-    color: '#E5383B',
-    marginBottom: '25%',
+    color: "#E5383B",
+    marginBottom: "25%",
   },
   inputContainer: {
-    marginBottom: '25%',
+    marginBottom: "25%",
   },
   input: {
-    width: '95%',
-    borderBottomColor: '#F5F3F4',
+    width: "95%",
+    borderBottomColor: "#F5F3F4",
     borderBottomWidth: 1,
-    marginBottom: '10%',
+    marginBottom: "10%",
   },
   inputDanger: {
-    width: '95%',
-    borderBottomColor: 'red',
+    width: "95%",
+    borderBottomColor: "red",
     borderBottomWidth: 1,
-    marginBottom: '10%',
+    marginBottom: "10%",
   },
   textInput: {
-    color: 'white',
+    color: "white",
   },
   button: {
     borderRadius: 100,
-    borderColor: '#E5383B',
+    borderColor: "#E5383B",
     borderWidth: 3,
-    height: '15%',
-    backgroundColor: 'transparent',
+    height: "15%",
+    backgroundColor: "transparent",
   },
   buttonText: {
     fontSize: 24,
-    fontFamily: 'Monserrat-Regular',
-    fontWeight: 'bold',
-    color: '#E5383B',
+    fontFamily: "Monserrat-Regular",
+    fontWeight: "bold",
+    color: "#E5383B",
   },
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
   },
   footerText: {
     fontSize: 18,
-    fontWeight: 'bold',
-    fontFamily: 'Monserrat-Regular',
-    color: '#F5F3F4',
-    textAlignVertical: 'center',
+    fontWeight: "bold",
+    fontFamily: "Monserrat-Regular",
+    color: "#F5F3F4",
+    textAlignVertical: "center",
   },
   footerButtonText: {
     fontSize: 18,
-    fontWeight: 'bold',
-    fontFamily: 'Monserrat-Regular',
-    color: '#E5383B',
+    fontWeight: "bold",
+    fontFamily: "Monserrat-Regular",
+    color: "#E5383B",
   },
   backButton: {
-    justifyContent: 'flex-start',
-    height: '5%',
-    width: '20%',
+    justifyContent: "flex-start",
+    height: "5%",
+    width: "20%",
     paddingHorizontal: 0,
     marginHorizontal: -10,
   },
   backText: {
-    color: '#F5F3F4',
+    color: "#F5F3F4",
     fontSize: 32,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
 
