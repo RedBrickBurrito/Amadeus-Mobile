@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import * as eva from "@eva-design/eva";
 import { ApplicationProvider, Button } from "@ui-kitten/components";
+import { useHistory } from "react-router-native";
 import { logIn } from "../services/user";
 
 function Login() {
@@ -18,15 +19,18 @@ function Login() {
     email: true,
     password: true,
   });
+  const history = useHistory();
 
-  const createTwoButtonAlert = (data) =>
+  const createAlert = (data) =>
     Alert.alert(data.title, data.message, [
       {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel",
+        text: "OK",
+        onPress: () => {
+          if (data.title == "Success") {
+            history.push("/viro");
+          }
+        },
       },
-      { text: "OK", onPress: () => console.log("OK Pressed") },
     ]);
 
   const validate = () => {
@@ -60,6 +64,9 @@ function Login() {
   };
 
   const handleSubmit = () => {
+    console.log("clicked submit");
+    console.log("email: ", email);
+    console.log("password", password);
     const validated = validate();
 
     if (validated) {
@@ -67,13 +74,13 @@ function Login() {
 
       logIn(data)
         .then((responseData) => {
-          createTwoButtonAlert({
+          createAlert({
             title: "Success",
             message: responseData.message,
           });
         })
         .catch((responseData) => {
-          createTwoButtonAlert({
+          createAlert({
             title: "Error",
             message: responseData.message,
           });
@@ -91,13 +98,22 @@ function Login() {
     }
   };
 
+  const handleBack = () => {
+    console.log("clicked back");
+
+    history.goBack();
+  };
+
+  const handleSignUpPress = () => {
+    console.log("pressed the sign up button");
+
+    history.push("/signup");
+  };
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <Text
-          style={styles.backText}
-          onPress={() => console.log("pressed the back button")}
-        >
+        <Text style={styles.backText} onPress={() => handleBack()}>
           ᐸ
         </Text>
         <Text style={styles.title}>Log In</Text>
@@ -135,7 +151,7 @@ function Login() {
             <Text style={styles.footerText}>Don't have an account? </Text>
             <Text
               style={styles.footerButtonText}
-              onPress={() => console.log("pressed the sign up button")}
+              onPress={() => handleSignUpPress()}
             >
               Sign Up
             </Text>

@@ -1,10 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
-  Image,
   View,
-  ImageBackground,
-  StatusBar,
   Text,
   TouchableWithoutFeedback,
   Alert,
@@ -15,8 +12,8 @@ import {
   Platform,
   Keyboard,
 } from "react-native";
-import * as eva from "@eva-design/eva";
-import { ApplicationProvider, Button, Input } from "@ui-kitten/components";
+import { useHistory, Redirect } from "react-router-native";
+import { Button, Input } from "@ui-kitten/components";
 import { signUp } from "../services/user";
 
 const useInputState = (initialValue = "#E5383B") => {
@@ -29,15 +26,18 @@ function Signup() {
   const [name, setname] = useState("");
   const [email, setemail] = useState("");
   const [psswd, setpsswd] = useState("");
+  const history = useHistory();
 
-  const createTwoButtonAlert = (data) =>
+  const createAlert = (data) =>
     Alert.alert(data.title, data.message, [
       {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel",
+        text: "OK",
+        onPress: () => {
+          if (data.title == "Success") {
+            history.push("/login");
+          }
+        },
       },
-      { text: "OK", onPress: () => console.log("OK Pressed") },
     ]);
 
   const handleSubmit = () => {
@@ -48,13 +48,13 @@ function Signup() {
 
       signUp(data)
         .then((responseData) => {
-          createTwoButtonAlert({
+          createAlert({
             title: "Success",
             message: responseData.message,
           });
         })
         .catch((responseData) => {
-          createTwoButtonAlert({
+          createAlert({
             title: "Error",
             message: responseData.message,
           });
@@ -89,6 +89,18 @@ function Signup() {
     return validated;
   };
 
+  const handleBack = () => {
+    console.log("clicked back");
+
+    history.goBack();
+  };
+
+  const handleLoginPress = () => {
+    console.log("clicked login");
+
+    history.push("/login");
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -97,7 +109,7 @@ function Signup() {
         <SafeAreaView>
           <ScrollView>
             <View style={styles.container}>
-              <Text style={styles.backbutton} onPress={this.onPress}>
+              <Text style={styles.backbutton} onPress={() => handleBack()}>
                 ᐸ
               </Text>
               <Text style={styles.title}>Sign Up</Text>
@@ -140,7 +152,10 @@ function Signup() {
               </Button>
               <Text style={styles.footer}>
                 <Text style={styles.footertext}>Already an user?</Text>
-                <Text style={styles.footerbutton} onPress={this.onPress}>
+                <Text
+                  style={styles.footerbutton}
+                  onPress={() => handleLoginPress()}
+                >
                   {" "}
                   Log in
                 </Text>
@@ -236,10 +251,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default () => (
-  <>
-    <ApplicationProvider {...eva} theme={eva.dark}>
-      <Signup />
-    </ApplicationProvider>
-  </>
-);
+export default Signup;
