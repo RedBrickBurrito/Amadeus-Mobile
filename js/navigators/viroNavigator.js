@@ -7,83 +7,99 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   View,
   StyleSheet,
   TouchableHighlight,
   SafeAreaView,
   Alert,
-} from 'react-native';
-
-import { ViroARSceneNavigator } from 'react-viro';
-import ToggleSwitch from 'toggle-switch-react-native';
-import { Text, Button, Input } from '@ui-kitten/components';
-import { sendMessage } from '../services/sendMessageService';
+} from "react-native";
+import {
+  ApplicationProvider,
+  Text,
+  Button,
+  Input,
+} from "@ui-kitten/components";
+import { sendMessage } from "../services/sendMessageService";
+import { ViroARSceneNavigator } from "react-viro";
+import ToggleSwitch from "toggle-switch-react-native";
+import * as eva from "@eva-design/eva";
 /*
-  TODO: Insert your API key below
-  */
+ TODO: Insert your API key below
+ */
 var sharedProps = {
-  apiKey: 'API_KEY_HERE',
+  apiKey: "API_KEY_HERE",
 };
 
 // Sets the default scene you want for AR and VR
-import InitialARScene from '../mainARScene';
-import SecondaryARScene from '../HelloWorldSceneAR';
+var InitialARScene = require("../mainARScene");
+var SecondaryARScene = require("../HelloWorldSceneAR");
 
-var UNSET = 'UNSET';
-var AR_NAVIGATOR_TYPE2 = 'AR2';
-var AR_NAVIGATOR_TYPE = 'AR';
+var UNSET = "UNSET";
+var AR_NAVIGATOR_TYPE2 = "AR2";
+var AR_NAVIGATOR_TYPE = "AR";
 
 // This determines which type of experience to launch in, or UNSET, if the user should
 // be presented with a choice of AR or VR. By default, we offer the user a choice.
 var defaultNavigatorType = UNSET;
 
-handleSendMessage = (message) => {
-  {
-    sendMessage(JSON.stringify(message))
-      .then((responseData) => {
-        Alert.alert('Success', responseData.message, [{ text: 'Ok' }], {
-          cancelable: true,
-        });
-      })
-      .catch((responseData) => {
-        Alert.alert(
-          'Failure',
-          JSON.stringify(responseData.message),
-          [{ text: 'Ok' }],
-          { cancelable: true }
-        );
-      });
+export function sendMessageToBeDisplayed(state) {
+  const newState = { ...state, newText: text };
+  return newState;
+}
+
+class App extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      value: "",
+    };
+
+    this.handleSendMessage = this.handleSendMessage.bind(this);
   }
-};
 
-const TextInputHandler = () => {
-  const [value, setValue] = React.useState('');
+  handleSendMessage = (messageToSend) => {
+    {
+      sendMessage(messageToSend)
+        .then((responseData) => {
+          Alert.alert("Amadeus says:", responseData.data, [{ text: "Close" }], {
+            cancelable: true,
+          });
+        })
+        .catch((responseData) => {
+          Alert.alert("Failure", responseData.data, [{ text: "Ok" }], {
+            cancelable: true,
+          });
+        });
+    }
+  };
+  render() {
+    return (
+      <>
+        <Input
+          placeholder="What are you thinking?"
+          onChangeText={(nextValue) => this.setState({ value: nextValue })}
+          value={this.state.value}
+          status="danger"
+          style={localStyles.textInput}
+        />
+        <Button
+          size="small"
+          style={localStyles.sendButton}
+          status="danger"
+          onPress={() => this.handleSendMessage(this.state.value)}
+          onPressOut={() => this.setState({ value: "" })}
+        >
+          Send
+        </Button>
+      </>
+    );
+  }
+}
 
-  return (
-    <>
-      <Input
-        placeholder="What are you thinking?"
-        onChangeText={(nextValue) => setValue(nextValue)}
-        value={value}
-        status="danger"
-        style={localStyles.textInput}
-      />
-      <Button
-        size="small"
-        style={localStyles.sendButton}
-        status="danger"
-        onPress={() => handleSendMessage(value)}
-        onPressOut={() => setValue('')}
-      >
-        Send
-      </Button>
-    </>
-  );
-};
-
-export default class ViroSample extends Component {
+export class ViroSample extends Component {
   constructor() {
     super();
 
@@ -114,77 +130,113 @@ export default class ViroSample extends Component {
   // Presents the user with a choice of an AR or VR experience
   _getExperienceSelector() {
     return (
-      <View style={localStyles.outer}>
-        <View style={localStyles.inner}>
-          <Text style={localStyles.titleText}>
-            Choose your desired experience:
-          </Text>
+      <>
+        <ApplicationProvider {...eva} theme={eva.dark}>
+          <View style={localStyles.outer}>
+            <View style={localStyles.inner}>
+              <Text style={localStyles.titleText}>
+                Choose your desired experience:
+              </Text>
 
-          <TouchableHighlight
-            style={localStyles.buttons}
-            onPress={this._getExperienceButtonOnPress(AR_NAVIGATOR_TYPE)}
-            underlayColor={'#68a0ff'}
-          >
-            <Text style={localStyles.buttonText}>AR</Text>
-          </TouchableHighlight>
+              <TouchableHighlight
+                style={localStyles.buttons}
+                onPress={this._getExperienceButtonOnPress(AR_NAVIGATOR_TYPE)}
+                underlayColor={"#68a0ff"}
+              >
+                <Text style={localStyles.buttonText}>AR</Text>
+              </TouchableHighlight>
 
-          <TouchableHighlight
-            style={localStyles.buttons}
-            onPress={this._getExperienceButtonOnPress(AR_NAVIGATOR_TYPE2)}
-            underlayColor={'#68a0ff'}
-          >
-            <Text style={localStyles.buttonText}>NO-AR</Text>
-          </TouchableHighlight>
-        </View>
-      </View>
+              <TouchableHighlight
+                style={localStyles.buttons}
+                onPress={this._getExperienceButtonOnPress(AR_NAVIGATOR_TYPE2)}
+                underlayColor={"#68a0ff"}
+              >
+                <Text style={localStyles.buttonText}>NO-AR</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </ApplicationProvider>
+      </>
     );
   }
 
   // Returns the ViroARSceneNavigator which will start the AR experience
   _getARNavigator() {
     return (
-      <SafeAreaView style={{ flex: 1, bottom: 0 }}>
-        <View
-          style={{
-            alignSelf: 'flex-end',
-            flexDirection: 'row',
-            backgroundColor: 'black',
-            height: '7%',
-            marginTop: 10,
-          }}
-        >
-          <ToggleSwitch
-            isOn={false}
-            onColor="green"
-            offColor="grey"
-            label="Turn off AR"
-            labelStyle={{
-              color: 'white',
-              fontWeight: '900',
-              right: 90,
-              top: 20,
+      <ApplicationProvider {...eva} theme={eva.dark}>
+        <SafeAreaView style={{ flex: 1, bottom: 0 }}>
+          <View
+            style={{
+              alignSelf: "flex-end",
+              flexDirection: "row",
+              backgroundColor: "black",
+              height: "7%",
+              marginTop: 10,
             }}
-            size="medium"
-            onToggle={(isOn) => console.log('changed to : ', isOn)}
-            style={{ marginTop: 10, left: 30 }}
+          >
+            <ToggleSwitch
+              isOn={false}
+              onColor="green"
+              offColor="grey"
+              label="Turn off AR"
+              labelStyle={{
+                color: "white",
+                fontWeight: "900",
+                right: 90,
+                top: 20,
+              }}
+              size="medium"
+              onToggle={(isOn) => console.log("changed to : ", isOn)}
+              style={{ marginTop: 10, left: 30 }}
+            />
+          </View>
+          <ViroARSceneNavigator
+            {...this.state.sharedProps}
+            initialScene={{ scene: InitialARScene }}
           />
-        </View>
-        <ViroARSceneNavigator
-          {...this.state.sharedProps}
-          initialScene={{ scene: InitialARScene }}
-        />
-        <TextInputHandler />
-      </SafeAreaView>
+          <App />
+        </SafeAreaView>
+      </ApplicationProvider>
     );
   }
 
   // Returns the ViroSceneNavigator which will start the VR experience
   _getARNavigator2() {
     return (
-      <ViroARSceneNavigator
-        {...this.state.sharedProps}
-        initialScene={{ scene: SecondaryARScene }}
-      />
+      <ApplicationProvider {...eva} theme={eva.dark}>
+        <SafeAreaView style={{ flex: 1, bottom: 0 }}>
+          <View
+            style={{
+              alignSelf: "flex-end",
+              flexDirection: "row",
+              backgroundColor: "black",
+              height: "7%",
+              marginTop: 10,
+            }}
+          >
+            <ToggleSwitch
+              isOn={false}
+              onColor="green"
+              offColor="grey"
+              label="Turn on AR"
+              labelStyle={{
+                color: "white",
+                fontWeight: "900",
+                right: 90,
+                top: 20,
+              }}
+              size="medium"
+              onToggle={(isOn) => console.log("changed to : ", isOn)}
+              style={{ marginTop: 10, left: 30 }}
+            />
+          </View>
+          <ViroARSceneNavigator
+            {...this.state.sharedProps}
+            initialScene={{ scene: SecondaryARScene }}
+          />
+          <App />
+        </SafeAreaView>
+      </ApplicationProvider>
     );
   }
 
@@ -209,30 +261,30 @@ export default class ViroSample extends Component {
 var localStyles = StyleSheet.create({
   viroContainer: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: "black",
   },
   outer: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'black',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "black",
   },
   inner: {
     flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
-    backgroundColor: 'black',
+    flexDirection: "column",
+    alignItems: "center",
+    backgroundColor: "black",
   },
   titleText: {
     paddingTop: 30,
     paddingBottom: 20,
-    color: '#fff',
-    textAlign: 'center',
+    color: "#fff",
+    textAlign: "center",
     fontSize: 25,
   },
   buttonText: {
-    color: '#fff',
-    textAlign: 'center',
+    color: "#fff",
+    textAlign: "center",
     fontSize: 20,
   },
   buttons: {
@@ -242,10 +294,10 @@ var localStyles = StyleSheet.create({
     paddingBottom: 20,
     marginTop: 10,
     marginBottom: 10,
-    backgroundColor: '#68a0cf',
+    backgroundColor: "#68a0cf",
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#fff',
+    borderColor: "#fff",
   },
   exitButton: {
     height: 50,
@@ -254,27 +306,27 @@ var localStyles = StyleSheet.create({
     paddingBottom: 10,
     marginTop: 10,
     marginBottom: 10,
-    backgroundColor: '#68a0cf',
+    backgroundColor: "#68a0cf",
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#fff',
+    borderColor: "#fff",
   },
   textInput: {
-    backgroundColor: 'black',
-    alignSelf: 'flex-start',
-    width: '80%',
+    backgroundColor: "black",
+    alignSelf: "flex-start",
+    width: "80%",
     borderRadius: 20,
     paddingLeft: 15,
-    height: '8%',
+    height: "8%",
     bottom: -14,
   },
   sendButton: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: 10,
     bottom: 54,
     left: 340,
-    width: '16%',
-    height: '5%',
+    width: "16%",
+    height: "5%",
   },
 });
 

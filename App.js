@@ -7,11 +7,11 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-import React from 'react';
-import * as eva from '@eva-design/eva';
-import { ApplicationProvider } from '@ui-kitten/components';
+import React from "react";
+import * as eva from "@eva-design/eva";
+import { ApplicationProvider } from "@ui-kitten/components";
 
-import ReactNavigator from './js/navigators/reactNavigator';
+import ReactNavigator from "./js/navigators/reactNavigator";
 
 export default function App() {
   return (
