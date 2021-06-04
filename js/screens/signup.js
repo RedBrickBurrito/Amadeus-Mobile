@@ -132,6 +132,7 @@ function Signup() {
               <Text style={styles.password}>Password</Text>
               <View>
                 <TextInput
+                  secureTextEntry
                   style={styles.input}
                   value={psswd}
                   onChangeText={(value) => handleChangeText(value, 'psswd')}
