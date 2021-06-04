@@ -24,7 +24,7 @@ function Settings() {
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
-            <TouchableWithoutFeedback nPress={Keyboard.dismiss}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <SafeAreaView>
                     <ScrollView>
                         <View style={styles.container}>
@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#161214',
         flex: 1,
         height: '100%',
+        paddingBottom: '20%'
     },
     title: {
       fontFamily: 'Montserrat-Bold',
